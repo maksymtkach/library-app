@@ -1,0 +1,50 @@
+{
+  "name": "lab-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack serve --open",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "prepare": "husky install",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Computer-Science-Department-ChNU/javascript-frameworks.git"
+  },
+  "private": true,
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@typescript-eslint/eslint-plugin": "^8.12.2",
+    "@typescript-eslint/parser": "^8.12.2",
+    "chai": "^5.1.2",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.30.0",
+    "globals": "^15.11.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.10",
+    "mocha": "^10.8.2",
+    "prettier": "^3.3.3",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.12.2",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "undici": "^6.20.1",
+    "uuid": "^11.0.2"
+  }
+}

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Система управління бібліотекою</title>
+    <link rel="stylesheet" href="./libs/bootstrap.css" />
+    <style>
+      .btn-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+      .validation-error {
+        color: red;
+        font-size: 0.875em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="text-center mb-4">
+        <h2>Система Управління Бібліотекою</h2>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Додати Книгу</h5>
+          <form id="bookForm">
+            <div class="form-group">
+              <input
+                type="text"
+                id="bookTitle"
+                class="form-control"
+                placeholder="Назва книги"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                id="bookAuthor"
+                class="form-control"
+                placeholder="Автор"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="number"
+                id="bookYear"
+                class="form-control"
+                placeholder="Рік видання"
+                required
+              />
+              <div id="yearValidationError" class="validation-error"></div>
+            </div>
+            <button type="submit" class="btn btn-success">Додати Книгу</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Додати Користувача</h5>
+          <form id="userForm">
+            <div class="form-group">
+              <input
+                type="text"
+                id="userName"
+                class="form-control"
+                placeholder="Ім'я"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="email"
+                id="userEmail"
+                class="form-control"
+                placeholder="Email"
+                required
+              />
+              <div id="emailValidationError" class="validation-error"></div>
+            </div>
+            <button type="submit" class="btn btn-success">
+              Додати Користувача
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Список Книг</h5>
+          <ul id="bookList" class="list-group">
+            <!-- Book items will be appended here dynamically -->
+          </ul>
+          <div id="paginationControls" class="mt-3"></div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Список Користувачів</h5>
+          <ul id="userList" class="list-group">
+            <!-- User items will be appended here dynamically -->
+          </ul>
+        </div>
+      </div>
+
+      <div id="borrowBookModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Позичити Книгу</h5>
+              <button
+                type="button"
+                class="close"
+                onclick="closeModal('borrowBookModal')"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="borrowBookForm">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="borrowUserId"
+                    class="form-control"
+                    placeholder="Ваш ID"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-success">
+                  Позичити Книгу
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="returnBookModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Повернути Книгу</h5>
+              <button
+                type="button"
+                class="close"
+                onclick="closeModal('returnBookModal')"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="returnBookForm">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="returnUserId"
+                    class="form-control"
+                    placeholder="Ваш ID"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-secondary">
+                  Повернути Книгу
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="notificationModal"
+        class="modal fade"
+        tabindex="-1"
+        role="dialog"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Сповіщення</h5>
+              <button
+                type="button"
+                class="close"
+                onclick="closeModal('notificationModal')"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="notificationModalContent">
+              <!-- Notification message will be dynamically added here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./dist/bundle.js"></script>
+    <script>
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const backdrop = document.getElementById('backdrop-' + modalId);
+        if (modal) {
+          modal.classList.remove('show');
+          modal.style.display = 'none';
+          modal.removeAttribute('aria-modal');
+          modal.removeAttribute('role');
+          document.body.classList.remove('modal-open');
+        }
+        if (backdrop) {
+          backdrop.remove();
+        }
+      }
+    </script>
+  </body>
+</html>
